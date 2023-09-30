@@ -1,3 +1,6 @@
+## WASSUPPPPPPP
+This repo is the offcial code of Team ___#0000. The original documentation for the FTC SDK is given below:
+
 ## NOTICE
 
 This repository contains the public FTC SDK for the CENTERSTAGE (2023-2024) competition season.
