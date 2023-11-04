@@ -49,16 +49,16 @@ public class TeamHardware {
     }
 
     public void init() {
-        motorLeftFront.setDirection(DcMotorEx.Direction.REVERSE);
+        motorLeftFront.setDirection(DcMotorEx.Direction.FORWARD);
         motorLeftFront.setPower(0.0);
 
-        motorRightFront.setDirection(DcMotorEx.Direction.FORWARD);
+        motorRightFront.setDirection(DcMotorEx.Direction.REVERSE);
         motorRightFront.setPower(0.0);
 
-        motorLeftBack.setDirection(DcMotorEx.Direction.REVERSE);
+        motorLeftBack.setDirection(DcMotorEx.Direction.FORWARD);
         motorLeftBack.setPower(0.0);
 
-        motorRightBack.setDirection(DcMotorEx.Direction.FORWARD);
+        motorRightBack.setDirection(DcMotorEx.Direction.REVERSE);
         motorRightBack.setPower(0.0);
     }
 
