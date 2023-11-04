@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.Teleop;
+package org.firstinspires.ftc.teamcode.A_Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -26,7 +25,7 @@ public class TeamTeleop extends LinearOpMode {
 
         waitForStart();
         if (opModeIsActive()) {
-            while (opModeIsActive()) {
+            while (opModeIsActive() && !isStopRequested()) {
                 if (!gamepad1.atRest()) {
                     try {
                         leftX1 = Range.clip(gamepad1.left_stick_x, -1, 1);
@@ -46,18 +45,6 @@ public class TeamTeleop extends LinearOpMode {
                 else{
                       robot.stopChassisMotors();
                 }
-
-                // GAMEPAD 2 - LIFT AND GRAB: MANUAL & AUTO
-                if (!gamepad2.atRest()) {
-                    try {
-
-                    } catch (Exception e) {
-                        telemetry.addData("TELEOP4:", "%s", e.toString());
-                        telemetry.update();
-                        RobotLog.ee("SMTECH", e, "TELEOP4");
-                    }
-                }
-
                 sleep(40);
             }
         }

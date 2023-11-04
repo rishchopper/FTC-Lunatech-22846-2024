@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Data;
 import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -22,7 +23,8 @@ public class TeamHardware {
     private DcMotorEx motorLeftBack;
     private DcMotorEx motorRightBack;
 
-    final double POWER_CHASSIS = 1.0;
+
+    final double POWER_CHASSIS = 0.7;
 
     private double r, robotAngle, v1, v2, v3, v4;
 
@@ -65,9 +67,16 @@ public class TeamHardware {
         myOpMode = opmode;
         init();
         motorLeftFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        motorLeftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         motorRightFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        motorRightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         motorLeftBack.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        motorLeftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         motorRightBack.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        motorRightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void init_auto(LinearOpMode opmode) {
