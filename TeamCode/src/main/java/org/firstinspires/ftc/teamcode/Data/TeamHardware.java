@@ -18,10 +18,10 @@ public class TeamHardware {
 
     private LinearOpMode myOpMode = null;
 
-    private DcMotorEx motorLeftFront;
-    private DcMotorEx motorRightFront;
-    private DcMotorEx motorLeftBack;
-    private DcMotorEx motorRightBack;
+    public DcMotorEx motorLeftFront;
+    public DcMotorEx motorRightFront;
+    public DcMotorEx motorLeftBack;
+    public DcMotorEx motorRightBack;
 
 
     final double POWER_CHASSIS = 0.7;

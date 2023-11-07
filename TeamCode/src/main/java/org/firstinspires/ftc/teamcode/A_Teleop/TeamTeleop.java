@@ -34,7 +34,9 @@ public class TeamTeleop extends LinearOpMode {
 
                         robot.setMotors(leftX1, -leftY1, rightX1);
 
+                        telemetry.clear();
                         telemetry.addData("GAMEPAD1", "Front %f,  Right %f, Turn %f", leftY1, leftX1, rightX1);
+                        telemetry.addData("Velocty", "Right_Back %f, Left_Front %f", robot.motorRightBack.getVelocity(), robot.motorLeftFront.getVelocity());
                         telemetry.update();
                     } catch (Exception e) {
                         telemetry.addData("TELEOP1:", "%s", e.toString());
