@@ -5,6 +5,7 @@ import static java.lang.Math.abs;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -22,6 +23,8 @@ public class TeamHardware {
     public DcMotorEx motorRightFront;
     public DcMotorEx motorLeftBack;
     public DcMotorEx motorRightBack;
+    public DcMotorEx motorLinearSlideLeft;
+    public DcMotorEx motorLinearSlideRight;
 
 
     final double POWER_CHASSIS = 0.7;
@@ -46,6 +49,8 @@ public class TeamHardware {
         motorRightFront = hardwareMap.get(DcMotorEx.class, "motorRightFront");
         motorRightBack = hardwareMap.get(DcMotorEx.class, "motorRightBack");
         motorLeftBack = hardwareMap.get(DcMotorEx.class, "motorLeftBack");
+        motorLinearSlideLeft = hardwareMap.get(DcMotorEx.class, "motorLinearSlideLeft");
+        motorLinearSlideRight = hardwareMap.get(DcMotorEx.class, "motorLinearSlideRight");
     }
 
     public void init() {
@@ -60,6 +65,12 @@ public class TeamHardware {
 
         motorRightBack.setDirection(DcMotorEx.Direction.REVERSE);
         motorRightBack.setPower(0.0);
+
+        motorLinearSlideLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorLinearSlideLeft.setPower(0);
+
+        motorLinearSlideRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorLinearSlideRight.setPower(0);
     }
 
     /* Initialize standard Hardware interfaces */
@@ -77,6 +88,12 @@ public class TeamHardware {
 
         motorRightBack.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         motorRightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        motorLinearSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLinearSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        motorLinearSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLinearSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void init_auto(LinearOpMode opmode) {
@@ -93,6 +110,12 @@ public class TeamHardware {
 
         motorRightBack.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motorRightBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        motorLinearSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLinearSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        motorLinearSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLinearSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("Starting at", "%7d: %7d: %7d: %7d",
                 motorLeftFront.getCurrentPosition(),
@@ -124,6 +147,17 @@ public class TeamHardware {
             telemetry.addData("setMotors", "%s", e.toString());
             telemetry.update();
             RobotLog.ee("SMTECH", e, "setMotors");
+        }
+    }
+
+    public void setLinearSlide(int id, double pow){
+        switch (id){
+            case 1:
+                motorLinearSlideLeft.setPower(pow);
+                break;
+
+            case 2:
+                motorLinearSlideRight.setPower(pow);
         }
     }
 
