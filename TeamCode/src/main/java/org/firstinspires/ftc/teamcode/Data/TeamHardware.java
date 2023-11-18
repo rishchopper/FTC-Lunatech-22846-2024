@@ -27,7 +27,7 @@ public class TeamHardware {
     public DcMotorEx motorLinearSlideRight;
 
 
-    final double POWER_CHASSIS = 0.7;
+    final double POWER_CHASSIS = 0.85;
 
     private double r, robotAngle, v1, v2, v3, v4;
 
