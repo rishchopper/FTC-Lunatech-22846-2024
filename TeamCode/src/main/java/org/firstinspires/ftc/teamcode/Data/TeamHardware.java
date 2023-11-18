@@ -69,7 +69,7 @@ public class TeamHardware {
         motorLinearSlideLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         motorLinearSlideLeft.setPower(0);
 
-        motorLinearSlideRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorLinearSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
         motorLinearSlideRight.setPower(0);
     }
 

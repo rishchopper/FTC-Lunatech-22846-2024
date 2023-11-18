@@ -47,12 +47,12 @@ public class TeamTeleop extends LinearOpMode {
                         telemetry.clear();
                         telemetry.addData("GAMEPAD1", "Front %f,  Right %f, Turn %f", leftY1, leftX1, rightX1);
                         telemetry.addData("Triggers", "Left_Trig %f, Right_Trig %f, Trig %f", trigL1, trigR1, triggers);
-                        telemetry.addData("Velocty", "Right_Back %f, Left_Front %f", robot.motorRightBack.getVelocity(), robot.motorLeftFront.getVelocity());
+                        telemetry.addData("Velocty", "Left %f, Right %f", robot.motorLinearSlideLeft.getVelocity(), robot.motorLinearSlideRight.getVelocity());
                         telemetry.update();
                     } catch (Exception e) {
-                        telemetry.addData("TELEOP1:", "%s", e.toString());
+                        telemetry.addData("TELEOP:", "%s", e.toString());
                         telemetry.update();
-                        RobotLog.ee("SMTECH", e, "TELEOP 1");
+                        RobotLog.ee("LUNATECH", e, "TELEOP");
                     }
                 //}
                 //else{
