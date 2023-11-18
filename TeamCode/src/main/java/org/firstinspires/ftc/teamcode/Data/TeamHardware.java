@@ -151,13 +151,24 @@ public class TeamHardware {
     }
 
     public void setLinearSlide(int id, double pow){
-        switch (id){
-            case 1:
-                motorLinearSlideLeft.setPower(pow);
-                break;
+        if (pow >= 0){
+            switch (id){
+                case 1:
+                    motorLinearSlideLeft.setPower(pow);
+                    break;
 
-            case 2:
-                motorLinearSlideRight.setPower(pow);
+                case 2:
+                    motorLinearSlideRight.setPower(pow);
+            }
+        }else if (pow < 0){
+            switch (id){
+                case 1:
+                    motorLinearSlideLeft.setPower((pow*0.7));
+                    break;
+
+                case 2:
+                    motorLinearSlideRight.setPower((pow*0.7));
+            }
         }
     }
 
