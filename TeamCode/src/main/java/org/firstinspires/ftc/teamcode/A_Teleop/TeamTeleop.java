@@ -23,6 +23,8 @@ public class TeamTeleop extends LinearOpMode {
         double trigR1;
         double triggers;
 
+        boolean dpadUP2;
+
         robot = new TeamHardware(hardwareMap, telemetry, this);
         telemetry.setAutoClear(false);
         robot.init_teleop(this);
@@ -37,6 +39,10 @@ public class TeamTeleop extends LinearOpMode {
                         trigR1 = Range.clip(gamepad1.right_trigger, -1, 1);
                         leftY1 = Range.clip(gamepad1.left_stick_y, -1, 1);
                         rightX1 = Range.clip(gamepad1.right_stick_x, -1, 1);
+
+                        dpadUP2 = gamepad2.dpad_up;
+
+                        robot.launchPlane(dpadUP2);
 
                         triggers = trigL1 + trigR1;
 

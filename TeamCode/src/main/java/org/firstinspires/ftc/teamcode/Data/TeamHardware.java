@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.Data;
 
 import static java.lang.Math.abs;
+import static java.lang.Thread.sleep;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -37,14 +39,14 @@ public class TeamHardware {
     public TouchSensor rightExtreme;
     public TouchSensor rightMean;
 
-    public Servo clawLeft;
-    public Servo clawRight;
-    public Servo planeLauncher;
-    public Servo clawTilt;
-    public Servo clawRot;
+    public Servo grabLeft;
+    public Servo grabRight;
+    public CRServo planeLauncher;
+    public Servo clawPitch;
+    public Servo clawRoll;
 
 
-    final double POWER_CHASSIS = 0.85;
+    final double POWER_CHASSIS = 0.8;
 
     private double r, robotAngle, v1, v2, v3, v4;
 
@@ -69,6 +71,11 @@ public class TeamHardware {
         motorLinearSlideLeft = hardwareMap.get(DcMotorEx.class, "motorLinearSlideLeft");
         motorLinearSlideRight = hardwareMap.get(DcMotorEx.class, "motorLinearSlideRight");
         motorArticulatedArm = hardwareMap.get(DcMotorEx.class, "motorArticulatedArm");
+        planeLauncher = hardwareMap.get(CRServo.class, "planeLauncher");
+        grabLeft = hardwareMap.get(Servo.class, "grabLeft");
+        grabRight = hardwareMap.get(Servo.class, "grabRight");
+        clawPitch = hardwareMap.get(Servo.class, "clawTilt");
+        clawRoll = hardwareMap.get(Servo.class, "clawRoll");
     }
 
     public void init() {
@@ -98,16 +105,16 @@ public class TeamHardware {
     public void init_teleop(LinearOpMode opmode) {
         myOpMode = opmode;
         init();
-        motorLeftFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        motorLeftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motorLeftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        motorRightFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        motorRightFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motorRightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        motorLeftBack.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        motorLeftBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motorLeftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        motorRightBack.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        motorRightBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motorRightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         motorLinearSlideLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -118,6 +125,8 @@ public class TeamHardware {
         
         motorArticulatedArm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motorArticulatedArm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        planeLauncher.setDirection(CRServo.Direction.REVERSE);
     }
 
     public void init_auto(LinearOpMode opmode) {
@@ -173,7 +182,7 @@ public class TeamHardware {
         } catch (Exception e) {
             telemetry.addData("setMotors", "%s", e.toString());
             telemetry.update();
-            RobotLog.ee("SMTECH", e, "setMotors");
+            RobotLog.ee("LUNATECH", e, "setMotors");
         }
     }
 
@@ -194,12 +203,36 @@ public class TeamHardware {
         }else if (pow < 0){
             switch (id){
                 case 1:
-                    motorLinearSlideLeft.setPower((pow*0.7));
+                    motorLinearSlideLeft.setPower((pow*0.6));
                     break;
 
                 case 2:
-                    motorLinearSlideRight.setPower((pow*0.7));
+                    motorLinearSlideRight.setPower((pow*0.6));
             }
+        }
+    }
+
+    public void launchPlane(boolean trigger){
+        Runnable runnable = () -> {
+            try {
+                planeLauncher.setPower(1.0);
+                sleep(1500);
+                planeLauncher.setPower(0.0);
+            } catch (InterruptedException e) {
+                telemetry.addData("ERROR: ", e);
+                telemetry.update();
+            }
+        };
+        Thread plane = new Thread(runnable);
+        if (trigger){
+            plane.start();
+        } else {
+            plane.interrupt();
+            plane.destroy();
+        }
+        if (myOpMode.isStopRequested()){
+            plane.interrupt();
+            plane.destroy();
         }
     }
 
@@ -217,7 +250,7 @@ public class TeamHardware {
         } catch (Exception e) {
             myOpMode.telemetry.addData("Exception encoderDrive", e.toString());
             myOpMode.telemetry.update();
-            RobotLog.ee("SMTECH", e, "exception in encoderDrive()");
+            RobotLog.ee("LUNATECH", e, "exception in encoderDrive()");
         }
         myOpMode.sleep(40);   // optional pause after each move
     }
@@ -238,7 +271,7 @@ public class TeamHardware {
         } catch (Exception e) {
             myOpMode.telemetry.addData("Exception encoderTurn", e.toString());
             myOpMode.telemetry.update();
-            RobotLog.ee("SMTECH", e, "exception in encoderTurn()");
+            RobotLog.ee("LUNATECH", e, "exception in encoderTurn()");
         }
         myOpMode.sleep(40);   // optional pause after each move
     }
@@ -269,7 +302,7 @@ public class TeamHardware {
         } catch (Exception e) {
             myOpMode.telemetry.addData("Exception setChassisTurnTargetPosition", e.toString());
             myOpMode.telemetry.update();
-            RobotLog.ee("SMTECH", e, "exception in setChassisTurnTargetPosition()");
+            RobotLog.ee("LUNATECH", e, "exception in setChassisTurnTargetPosition()");
         }
 
     }
@@ -291,7 +324,7 @@ public class TeamHardware {
         } catch (Exception e) {
             myOpMode.telemetry.addData("Exception beginChassisMotion", e.toString());
             myOpMode.telemetry.update();
-            RobotLog.ee("SMTECH", e, "exception in beginChassisMotion()");
+            RobotLog.ee("LUNATECH", e, "exception in beginChassisMotion()");
         }
     }
 
@@ -324,7 +357,7 @@ public class TeamHardware {
         } catch (Exception e) {
             myOpMode.telemetry.addData("Exception moveChassisToTarget", e.toString());
             myOpMode.telemetry.update();
-            RobotLog.ee("SMTECH", e, "exception in moveChassisToTarget()");
+            RobotLog.ee("LUNATECH", e, "exception in moveChassisToTarget()");
         }
     }
 
@@ -391,7 +424,7 @@ public class TeamHardware {
         } catch (Exception e) {
             myOpMode.telemetry.addData("Exception setChassisTargetPosition", e.toString());
             myOpMode.telemetry.update();
-            RobotLog.ee("SMTECH", e, "exception in setChassisTargetPosition()");
+            RobotLog.ee("LUNATECH", e, "exception in setChassisTargetPosition()");
         }
     }
 
@@ -418,7 +451,7 @@ public class TeamHardware {
         } catch (Exception e) {
             myOpMode.telemetry.addData("Exception stopChassis", e.toString());
             myOpMode.telemetry.update();
-            RobotLog.ee("SMTECH", e, "exception in stopChassis()");
+            RobotLog.ee("LUNATECH", e, "exception in stopChassis()");
         }
     }
 }
