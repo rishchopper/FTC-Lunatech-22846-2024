@@ -224,13 +224,9 @@ public class TeamHardware {
             }
         };
         Thread plane = new Thread(runnable);
-        if (trigger){
+        if (trigger && !plane.isAlive()){
             plane.start();
-        } else {
-            plane.interrupt();
-            plane.destroy();
-        }
-        if (myOpMode.isStopRequested()){
+        } else if (myOpMode.isStopRequested()){
             plane.interrupt();
             plane.destroy();
         }
