@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Data;
 import static java.lang.Math.abs;
 import static java.lang.Thread.sleep;
 
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -38,12 +39,15 @@ public class TeamHardware {
     public TouchSensor leftMean;
     public TouchSensor rightExtreme;
     public TouchSensor rightMean;
+    public RevColorSensorV3 clawLeftProx;
+    public RevColorSensorV3 clawRightProx;
 
     public Servo grabLeft;
     public Servo grabRight;
     public CRServo planeLauncher;
     public Servo clawPitch;
     public Servo clawRoll;
+    public Servo hangDeploy;
 
 
     final double POWER_CHASSIS = 0.8;
@@ -127,6 +131,7 @@ public class TeamHardware {
         motorArticulatedArm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         planeLauncher.setDirection(CRServo.Direction.REVERSE);
+        hangDeploy.setPosition(0);
     }
 
     public void init_auto(LinearOpMode opmode) {
@@ -188,6 +193,14 @@ public class TeamHardware {
 
     public void setManualArticulatedArm(double power){
         motorArticulatedArm.setPower(power);
+    }
+
+    public void armPos(int state){
+        if (state == 0){
+            //TODO: Set arm in PICKUP MODE
+        } else if (state == 1){
+            //TODO: Set arm in DROP MODE
+        }
     }
 
     public void setLinearSlide(int id, double pow){
