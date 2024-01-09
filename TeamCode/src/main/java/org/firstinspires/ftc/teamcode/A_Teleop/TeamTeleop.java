@@ -23,14 +23,17 @@ public class TeamTeleop extends LinearOpMode {
         double leftY2;
         double rightX2;
 
-        double trigL1;
-        double trigR1;
+        double trigL2;
+        double trigR2;
         double triggers;
 
         boolean dpadUP2;
         boolean dpadDOWN2;
         boolean dpadLEFT2;
         boolean dpadRIGHT2;
+
+        double rTrig;
+        float lTrig;
 
         robot = new TeamHardware(hardwareMap, telemetry, this);
         telemetry.setAutoClear(true);
@@ -41,8 +44,8 @@ public class TeamTeleop extends LinearOpMode {
             while (opModeIsActive() && !isStopRequested()) {
                 //if (!gamepad1.atRest()) {
                     try {
-                        trigL1 = -Range.clip(gamepad1.left_trigger, -1, 1);
-                        trigR1 = Range.clip(gamepad1.right_trigger, -1, 1);
+                        trigL2 = -Range.clip(gamepad2.left_trigger, -1, 1);
+                        trigR2 = Range.clip(gamepad2.right_trigger, -1, 1);
 
                         leftX1 = Range.clip(gamepad1.left_stick_x, -1, 1);
                         leftY1 = Range.clip(gamepad1.left_stick_y, -1, 1);
@@ -53,13 +56,25 @@ public class TeamTeleop extends LinearOpMode {
 
                         dpadUP2 = gamepad2.dpad_up;
                         dpadDOWN2 = gamepad2.dpad_down;
+                        dpadLEFT2 = gamepad2.dpad_left;
+                        dpadRIGHT2 = gamepad2.dpad_right;
+
+                        rTrig = gamepad2.right_trigger;
+                        lTrig = gamepad2.right_trigger;
+
 
                         robot.launchPlane(dpadDOWN2);
                         if (dpadUP2){
                             robot.hangDeploy.setPosition(0.3);
                         }
 
-                        triggers = trigL1 + trigR1;
+                        if (dpadLEFT2){
+                            MODE = "ASSIST";
+                        } else if(dpadRIGHT2){
+                            MODE = "MANUAL CONTROL";
+                        }
+
+                        triggers = trigL2 + trigR2;
 
                         robot.setMotors(leftX1, -leftY1, rightX1);
                         robot.setLinearSlide(1, triggers);
@@ -67,12 +82,12 @@ public class TeamTeleop extends LinearOpMode {
 
                         if (MODE == "ASSIST"){
                             telemetry.addData("BOTMODE: ", "ASSISTED");
-                            if (leftY2 < -0.2){
+                            if (lTrig > 0.2){
                                 telemetry.addData("ARM MODE: ", "PICKUP");
                                 robot.clawRoll.setPosition(0.0);
                                 robot.clawPitch.setPosition(0.0);
                                 robot.armPos(0);
-                            } else if (leftY2 > 0.2){
+                            } else if (rTrig > 0.2){
                                 telemetry.addData("ARM MODE: ", "DROP");
                                 robot.clawRoll.setPosition(0.6);
                                 robot.clawPitch.setPosition(0.4);
@@ -80,11 +95,20 @@ public class TeamTeleop extends LinearOpMode {
                             }
                         } else {
                             telemetry.addData("BOTMODE: ", "MANUAL CONTROL");
-                            robot.setManualArticulatedArm(rightX2);
+                            robot.setManualArticulatedArm(leftY2);
+                            if (lTrig > 0.2){
+                                telemetry.addData("CLAW MODE: ", "PICKUP");
+                                robot.clawRoll.setPosition(0.0);
+                                robot.clawPitch.setPosition(0.0);
+                            } else if (rTrig > 0.2){
+                                telemetry.addData("CLAW MODE: ", "DROP");
+                                robot.clawRoll.setPosition(0.6);
+                                robot.clawPitch.setPosition(0.4);
+                            }
                         }
 
                         telemetry.addData("GAMEPAD1", "Front %f,  Right %f, Turn %f", leftY1, leftX1, rightX1);
-                        telemetry.addData("Triggers", "Left_Trig %f, Right_Trig %f, Trig %f", trigL1, trigR1, triggers);
+                        telemetry.addData("Triggers", "Left_Trig %f, Right_Trig %f, Trig %f", trigL2, trigR2, triggers);
                         telemetry.addData("Velocty", "Left %f, Right %f", robot.motorLinearSlideLeft.getVelocity(), robot.motorLinearSlideRight.getVelocity());
                         telemetry.update();
                     } catch (Exception e) {
