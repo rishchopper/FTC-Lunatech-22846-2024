@@ -27,13 +27,13 @@ public class TeamTeleop extends LinearOpMode {
         double trigR2;
         double triggers;
 
-        boolean dpadUP2;
-        boolean dpadDOWN2;
-        boolean dpadLEFT2;
-        boolean dpadRIGHT2;
+        boolean a = false, b = false;
 
         double rTrig;
         float lTrig;
+
+        long tA = System.currentTimeMillis();
+        long tB = System.currentTimeMillis();
 
         robot = new TeamHardware(hardwareMap, telemetry, this);
         telemetry.setAutoClear(true);
@@ -54,23 +54,27 @@ public class TeamTeleop extends LinearOpMode {
                         leftY2 = Range.clip(gamepad2.left_stick_y, -1, 1);
                         rightX2 = Range.clip(gamepad2.right_stick_x, -1, 1);
 
-                        dpadUP2 = gamepad2.dpad_up;
-                        dpadDOWN2 = gamepad2.dpad_down;
-                        dpadLEFT2 = gamepad2.dpad_left;
-                        dpadRIGHT2 = gamepad2.dpad_right;
 
                         rTrig = gamepad2.right_trigger;
                         lTrig = gamepad2.right_trigger;
 
+                        if (gamepad2.a && System.currentTimeMillis()-tA >= 500){
+                            a = !a;
+                            tA = System.currentTimeMillis();
+                        }
+                        if (gamepad2.b && System.currentTimeMillis()-tB >= 500){
+                            b = !b;
+                            tB = System.currentTimeMillis();
+                        }
 
-                        robot.launchPlane(dpadDOWN2);
-                        if (dpadUP2){
+                        robot.launchPlane(gamepad2.dpad_down);
+                        if (gamepad2.dpad_up){
                             robot.hangDeploy.setPosition(0.3);
                         }
 
-                        if (dpadLEFT2){
+                        if (gamepad2.dpad_left){
                             MODE = "ASSIST";
-                        } else if(dpadRIGHT2){
+                        } else if(gamepad2.dpad_right){
                             MODE = "MANUAL CONTROL";
                         }
 
@@ -79,6 +83,17 @@ public class TeamTeleop extends LinearOpMode {
                         robot.setMotors(leftX1, -leftY1, rightX1);
                         robot.setLinearSlide(1, triggers);
                         robot.setLinearSlide(2, triggers);
+
+                        if (a){
+                            robot.grabLeft.setPosition(0);
+                        } else {
+                            robot.grabLeft.setPosition(0.6);
+                        }
+                        if (b){
+                            robot.grabRight.setPosition(0);
+                        } else {
+                            robot.grabRight.setPosition(0.6);
+                        }
 
                         if (MODE == "ASSIST"){
                             telemetry.addData("BOTMODE: ", "ASSISTED");
