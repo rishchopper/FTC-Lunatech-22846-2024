@@ -16,6 +16,7 @@ public class TeamTeleop extends LinearOpMode {
     @Override
     public void runOpMode() {
         String MODE = "ASSIST";
+        String ARM = "PICKUP";
 
         double leftX1;
         double leftY1;
@@ -29,11 +30,12 @@ public class TeamTeleop extends LinearOpMode {
 
         boolean a = false, b = false;
 
-        double rTrig;
-        float lTrig;
+        boolean rTrig;
+        boolean lTrig;
 
         long tA = System.currentTimeMillis();
         long tB = System.currentTimeMillis();
+
 
         robot = new TeamHardware(hardwareMap, telemetry, this);
         telemetry.setAutoClear(true);
@@ -55,8 +57,8 @@ public class TeamTeleop extends LinearOpMode {
                         rightX2 = Range.clip(gamepad2.right_stick_x, -1, 1);
 
 
-                        rTrig = gamepad2.right_trigger;
-                        lTrig = gamepad2.right_trigger;
+                        rTrig = gamepad2.right_bumper;
+                        lTrig = gamepad2.left_bumper;
 
                         if (gamepad2.a && System.currentTimeMillis()-tA >= 500){
                             a = !a;
@@ -87,40 +89,44 @@ public class TeamTeleop extends LinearOpMode {
                         if (a){
                             robot.grabLeft.setPosition(0);
                         } else {
-                            robot.grabLeft.setPosition(0.6);
+                            robot.grabLeft.setPosition(0.18);
                         }
                         if (b){
                             robot.grabRight.setPosition(0);
                         } else {
-                            robot.grabRight.setPosition(0.6);
+                            robot.grabRight.setPosition(0.18);
                         }
 
                         if (MODE == "ASSIST"){
                             telemetry.addData("BOTMODE: ", "ASSISTED");
-                            if (lTrig > 0.2){
-                                telemetry.addData("ARM MODE: ", "PICKUP");
-                                robot.clawRoll.setPosition(0.0);
-                                robot.clawPitch.setPosition(0.0);
+                            if (lTrig){
+                                ARM = "PICKUP";
+                                robot.clawRoll.setPosition(0.01);
+                                robot.clawPitch.setPosition(0.57);
                                 robot.armPos(0);
-                            } else if (rTrig > 0.2){
-                                telemetry.addData("ARM MODE: ", "DROP");
-                                robot.clawRoll.setPosition(0.6);
-                                robot.clawPitch.setPosition(0.4);
+                            } else if (rTrig){
+                                ARM = "DROP";
                                 robot.armPos(1);
+                                sleep(100);
+                                robot.clawRoll.setPosition(0.67);
+                                robot.clawPitch.setPosition(0.4);
                             }
                         } else {
                             telemetry.addData("BOTMODE: ", "MANUAL CONTROL");
                             robot.setManualArticulatedArm(leftY2);
-                            if (lTrig > 0.2){
-                                telemetry.addData("CLAW MODE: ", "PICKUP");
-                                robot.clawRoll.setPosition(0.0);
-                                robot.clawPitch.setPosition(0.0);
-                            } else if (rTrig > 0.2){
-                                telemetry.addData("CLAW MODE: ", "DROP");
-                                robot.clawRoll.setPosition(0.6);
+                            if (lTrig){
+                                ARM = "PICKUP";
+                                robot.clawRoll.setPosition(0.01);
+                                robot.clawPitch.setPosition(0.57);
+                            } else if (rTrig){
+                                ARM = "DROP";
+                                robot.clawRoll.setPosition(0.67);
                                 robot.clawPitch.setPosition(0.4);
                             }
                         }
+
+                        telemetry.addData("ARM POS: ", ARM);
+                        telemetry.addData("ARM ENCODER: ", robot.motorArticulatedArm.getCurrentPosition());
 
                         telemetry.addData("GAMEPAD1", "Front %f,  Right %f, Turn %f", leftY1, leftX1, rightX1);
                         telemetry.addData("Triggers", "Left_Trig %f, Right_Trig %f, Trig %f", trigL2, trigR2, triggers);

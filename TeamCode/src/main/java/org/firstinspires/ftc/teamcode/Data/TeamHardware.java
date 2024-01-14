@@ -50,7 +50,7 @@ public class TeamHardware {
     public Servo hangDeploy;
 
 
-    final double POWER_CHASSIS = 0.8;
+    final double POWER_CHASSIS = 0.6;
 
     private double r, robotAngle, v1, v2, v3, v4;
 
@@ -80,6 +80,7 @@ public class TeamHardware {
         grabRight = hardwareMap.get(Servo.class, "grabRight");
         clawPitch = hardwareMap.get(Servo.class, "clawTilt");
         clawRoll = hardwareMap.get(Servo.class, "clawRoll");
+        hangDeploy= hardwareMap.get(Servo.class, "servoHang");
     }
 
     public void init() {
@@ -109,16 +110,16 @@ public class TeamHardware {
     public void init_teleop(LinearOpMode opmode) {
         myOpMode = opmode;
         init();
-        motorLeftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorLeftFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         motorLeftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        motorRightFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorRightFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         motorRightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        motorLeftBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorLeftBack.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         motorLeftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        motorRightBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorRightBack.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         motorRightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         motorLinearSlideLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -126,7 +127,8 @@ public class TeamHardware {
 
         motorLinearSlideRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motorLinearSlideRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        
+
+        motorArticulatedArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorArticulatedArm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motorArticulatedArm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
@@ -138,16 +140,16 @@ public class TeamHardware {
         myOpMode = opmode;
         init();
         motorLeftFront.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        motorLeftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorLeftFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         motorRightFront.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        motorRightFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorRightFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         motorLeftBack.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        motorLeftBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorLeftBack.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         motorRightBack.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        motorRightBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorRightBack.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         motorLinearSlideRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motorLinearSlideRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -192,14 +194,19 @@ public class TeamHardware {
     }
 
     public void setManualArticulatedArm(double power){
+        motorArticulatedArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorArticulatedArm.setPower(power);
     }
 
     public void armPos(int state){
         if (state == 0){
-            //TODO: Set arm in PICKUP MODE
+            motorArticulatedArm.setTargetPosition(0);
+            motorArticulatedArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorArticulatedArm.setPower(0.6);
         } else if (state == 1){
-            //TODO: Set arm in DROP MODE
+            motorArticulatedArm.setTargetPosition(2300);
+            motorArticulatedArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorArticulatedArm.setPower(0.6);
         }
     }
 
