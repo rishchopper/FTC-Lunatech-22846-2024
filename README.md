@@ -1,5 +1,5 @@
 ## WASSUPPPPPPP
-This repo is the offcial code of Team ___#0000. The original documentation for the FTC SDK is given below:
+This repo is the offcial code of Team Lunatech#22846. The original documentation for the FTC SDK is given below:
 
 ## NOTICE
 
