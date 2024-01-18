@@ -109,7 +109,7 @@ public class TeamTeleop extends LinearOpMode {
                                 robot.armPos(1);
                                 sleep(100);
                                 robot.clawRoll.setPosition(0.67);
-                                robot.clawPitch.setPosition(0.4);
+                                robot.clawPitch.setPosition(0.3);
                             }
                         } else {
                             telemetry.addData("BOTMODE: ", "MANUAL CONTROL");
@@ -118,10 +118,12 @@ public class TeamTeleop extends LinearOpMode {
                                 ARM = "PICKUP";
                                 robot.clawRoll.setPosition(0.01);
                                 robot.clawPitch.setPosition(0.57);
+                                robot.setManualArticulatedArm(leftY2);
                             } else if (rTrig){
                                 ARM = "DROP";
                                 robot.clawRoll.setPosition(0.67);
-                                robot.clawPitch.setPosition(0.4);
+                                robot.clawPitch.setPosition(0.3);
+                                robot.setManualArticulatedArm(leftY2);
                             }
                         }
 
