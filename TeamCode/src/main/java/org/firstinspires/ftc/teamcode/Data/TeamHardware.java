@@ -202,25 +202,25 @@ public class TeamHardware {
         if (state == 0){
             motorArticulatedArm.setTargetPosition(0);
             motorArticulatedArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            for (double i = 0; i <= 0.4; i += 0.1){
-                motorArticulatedArm.setPower(i);
-            }
-            while (motorArticulatedArm.getCurrentPosition() > 200){}
-            for (double j = 0.4; j >= 0.2; j -= 0.1){
-                motorArticulatedArm.setPower(j);
-            }
-            motorArticulatedArm.setPower(0.2);
-        } else if (state == 1){
-            motorArticulatedArm.setTargetPosition(2800);
-            motorArticulatedArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            for (double i = 0; i <= 0.6; i += 0.1){
+            for (double i = 0.2; i <= 0.6; i += 0.1){
                 motorArticulatedArm.setPower(i);
             }
             while (motorArticulatedArm.getCurrentPosition() > 200){}
             for (double j = 0.6; j >= 0.2; j -= 0.1){
                 motorArticulatedArm.setPower(j);
             }
-            motorArticulatedArm.setPower(0.2);
+            motorArticulatedArm.setPower(0.6);
+        } else if (state == 1){
+            motorArticulatedArm.setTargetPosition(2800);
+            motorArticulatedArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            for (double i = 0.2; i <= 0.6; i += 0.1){
+                motorArticulatedArm.setPower(i);
+            }
+            while (2800 - motorArticulatedArm.getCurrentPosition() <= 200){}
+            for (double j = 0.6; j >= 0.2; j -= 0.1){
+                motorArticulatedArm.setPower(j);
+            }
+            motorArticulatedArm.setPower(0.6);
         }
     }
 

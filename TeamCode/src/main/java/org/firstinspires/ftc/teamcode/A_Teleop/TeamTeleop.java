@@ -87,14 +87,14 @@ public class TeamTeleop extends LinearOpMode {
                         robot.setLinearSlide(2, triggers);
 
                         if (a){
-                            robot.grabLeft.setPosition(0);
+                            robot.grabLeft.setPosition(0.2);
                         } else {
-                            robot.grabLeft.setPosition(0.18);
+                            robot.grabLeft.setPosition(0.32);
                         }
                         if (b){
-                            robot.grabRight.setPosition(0);
+                            robot.grabRight.setPosition(0.2);
                         } else {
-                            robot.grabRight.setPosition(0.18);
+                            robot.grabRight.setPosition(0.32);
                         }
 
                         if (MODE == "ASSIST"){
